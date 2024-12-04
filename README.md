@@ -28,8 +28,10 @@ Este projeto é um **analisador léxico (lexer)** desenvolvido com **Flex** para
    flex lexer.l
 
 2. Compile o código gerado (lex.yy.c) usando o GCC:
+    ```bash
     gcc lex.yy.c -o lexer -lfl
 
 3. Execute o lexer com um arquivo de entrada:
+    ```bash
     ./lexer < arquivo_teste.c
 
