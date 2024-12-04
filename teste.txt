@@ -1,0 +1,22 @@
+int main() {
+    int x = 10;
+    // Este é um comentário :: )) ;; && -
+    67aa
+    if (x > 5) {
+        x = x + 1;
+    }
+    ))
+    ((
+
+    ))
+    *&
+    /* Comentário de bloco
+       em várias linhas int x ; ; ; + - )() /*  __
+       
+       
+       
+       
+        */
+       _
+    return x;
+}

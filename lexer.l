@@ -7,32 +7,48 @@ int line_number = 1;
 %}
 
 %%
-"if"|"else"|"while"|"int"|"return"|"void" {
-    printf("PALAVRA-CHAVE: %s (linha %d)\n", yytext, line_number);
-}
+"if"     { printf("IF " ); }
+"else"   { printf("ELSE " ); }
+"while"  { printf("WHILE " ); }
+"int"    { printf("INT " ); }
+"return" { printf("RETURN " ); }
+"void"   { printf("VOID " ); }
 
-[a-zA-Z_][a-zA-Z0-9_]* {
-    printf("IDENTIFICADOR: %s (linha %d)\n", yytext, line_number);
+[a-zA-Z]+ {
+    printf("ID " );
 }
 
 [0-9]+ {
-    printf("NUMERO: %s (linha %d)\n", yytext, line_number);
+    printf("NUM " );
 }
 
-"=="|"<="|">="|"<"|">"|"!="|"="|"\+"|"-"|"*"|"/" {
-    printf("OPERADOR: %s (linha %d)\n", yytext, line_number);
-}
+"==" { printf("IGUALDADE " ); }
+"<=" { printf("MENOR IGL " ); }
+">=" { printf("MAIOR IGL " ); }
+"<"  { printf("MENOR " ); }
+">"  { printf("MAIOR " ); }
+"!=" { printf("DIFERENTE " ); }
+"="  { printf("IGUAL " ); }
+"+"  { printf("SOMA " ); }
+"-"  { printf("SUB " ); }
+"*"  { printf("MULT " ); }
+"/"  { printf("DIV " ); }
 
-"("|")"|"{"|"}"|"["|"]"|";"|"," {
-    printf("DELIMITADOR: %s (linha %d)\n", yytext, line_number);
-}
+"(" { printf("ABRE PAREN " ); }
+")" { printf("FECHA PAREN " ); }
+"{" { printf("ABRE CHAVES " ); }
+"}" { printf("FECHA CHAVES " ); }
+"[" { printf("ABRE COL " ); }
+"]" { printf("FECHA COL " ); }
+";" { printf("PEV " ); }
+"," { printf("VIRGULA " ); }
 
 "//".* {
-    printf("COMENTARIO DE LINHA (linha %d): %s\n", line_number, yytext);
+    printf("COMENTARIO LINHA");
 }
 
 "/*"([^*]|\*+[^*/])*\*+"/" {
-    printf("COMENTARIO DE BLOCO (linha %d)\n", line_number);
+    printf("COMENTARIO DE BLOCO");
     // Incrementar linhas dentro de comentários de bloco
     for (int i = 0; yytext[i] != '\0'; i++) {
         if (yytext[i] == '\n') line_number++;
@@ -41,17 +57,13 @@ int line_number = 1;
 
 [ \t]+ ; 
 
-\n { line_number++; }
+\n { line_number++; printf("\n"); }
 
-. {
-    printf("CARACTERE INVALIDO: %s (linha %d)\n", yytext, line_number);
-}
+. { printf("ERRO LÉXICO: %s (linha %d)", yytext, line_number);}
 
 %%
 
 int main(int argc, char **argv) {
-    printf("Analisador Léxico para C- Iniciado\n");
-    yylex(); // Executa o analisador léxico
-    printf("Analisador Léxico Finalizado\n");
+    yylex();
     return 0;
 }
