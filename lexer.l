@@ -1,69 +1,71 @@
 %{
+#include "parser.tab.h"  // Para os tokens gerados pelo Bison
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include "ast.h"
 
-// número de linhas
+extern YYSTYPE yylval;
 int line_number = 1;
 %}
 
 %%
-"if"     { printf("IF " ); }
-"else"   { printf("ELSE " ); }
-"while"  { printf("WHILE " ); }
-"int"    { printf("INT " ); }
-"return" { printf("RETURN " ); }
-"void"   { printf("VOID " ); }
 
-[a-zA-Z]+ {
-    printf("ID " );
+"if"           { return IF; }
+"else"         { return ELSE; }
+"while"        { return WHILE; }
+"int"          { return INT; }
+"return"       { return RETURN; }
+"void"         { return VOID; }
+
+[a-zA-Z_][a-zA-Z0-9_]*  { 
+    yylval.str = strdup(yytext); 
+    return ID; 
 }
 
-[0-9]+ {
-    printf("NUM " );
+[0-9]+      { 
+    yylval.intval = atoi(yytext); 
+    return NUM; 
 }
 
-"==" { printf("IGUALDADE " ); }
-"<=" { printf("MENOR IGL " ); }
-">=" { printf("MAIOR IGL " ); }
-"<"  { printf("MENOR " ); }
-">"  { printf("MAIOR " ); }
-"!=" { printf("DIFERENTE " ); }
-"="  { printf("IGUAL " ); }
-"+"  { printf("SOMA " ); }
-"-"  { printf("SUB " ); }
-"*"  { printf("MULT " ); }
-"/"  { printf("DIV " ); }
+"=="        { return IGUALDADE; }
+"<="        { return MENOR_IGL; }
+">="        { return MAIOR_IGL; }
+"<"         { return MENOR; }
+">"         { return MAIOR; }
+"!="        { return DIFERENTE; }
+"="         { return IGUAL; }
 
-"(" { printf("ABRE PAREN " ); }
-")" { printf("FECHA PAREN " ); }
-"{" { printf("ABRE CHAVES " ); }
-"}" { printf("FECHA CHAVES " ); }
-"[" { printf("ABRE COL " ); }
-"]" { printf("FECHA COL " ); }
-";" { printf("PEV " ); }
-"," { printf("VIRGULA " ); }
+"+"         { return SOMA; }
+"-"         { return SUB; }
+"*"         { return MULT; }
+"/"         { return DIV; }
 
-"//".* {
-    printf("COMENTARIO LINHA");
-}
+"("         { return ABRE_PAREN; }
+")"         { return FECHA_PAREN; }
+"{"         { return ABRE_CHAVES; }
+"}"         { return FECHA_CHAVES; }
+"["         { return ABRE_COL; }
+"]"         { return FECHA_COL; }
+";"         { return PEV; }
+","         { return VIRGULA; }
 
-"/*"([^*]|\*+[^*/])*\*+"/" {
-    printf("COMENTARIO DE BLOCO");
-    // Incrementar linhas dentro de comentários de bloco
+"//".*      { /* Ignorar comentários de linha */ }
+
+"/*"([^*]|\*+[^*/])*\*+"/"  { 
     for (int i = 0; yytext[i] != '\0'; i++) {
         if (yytext[i] == '\n') line_number++;
     }
 }
 
-[ \t]+ ; 
+[ \t]+      { /* Ignorar */ }
 
-\n { line_number++; printf("\n"); }
+\n          { line_number++; }
 
-. { printf("ERRO LÉXICO: %s (linha %d)", yytext, line_number);}
+.           { return ERRO; }
 
 %%
 
-int main(int argc, char **argv) {
-    yylex();
-    return 0;
+int yywrap(void) {
+    return 1;
 }
