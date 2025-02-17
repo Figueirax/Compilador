@@ -4,8 +4,9 @@
 #include <stdarg.h>
 #include <string.h>
 
+/* Cria um nó da AST com nome, valor e n filhos */
 ast* new_ast(char* name, char* value, int n, ...) {
-    ast *node = malloc(sizeof(ast));
+    ast* node = malloc(sizeof(ast));
     if (!node) { perror("malloc"); exit(1); }
     node->name = strdup(name);
     node->value = (value != NULL) ? strdup(value) : NULL;
@@ -25,24 +26,14 @@ ast* new_ast(char* name, char* value, int n, ...) {
     return node;
 }
 
-ast* criar_programa(ast* declaracoes_globais, ast* declaracoes_funcoes) {
-    return new_ast("programa", "", 2, declaracoes_globais, declaracoes_funcoes);
-}
-
-/* Cria uma lista de comandos */
-ast* criar_lista_comandos(ast* novo_comando, ast* comandos_existentes) {
-    if (!comandos_existentes) {
-        return new_ast("lista_comandos", "", 1, novo_comando);
-    }
-    return new_ast("lista_comandos", "", 2, comandos_existentes, novo_comando);
-}
-
+/* Imprime a AST com indentação simples */
 void print_ast(ast* root, int indent) {
-    if (root == NULL) return;
-    for (int i = 0; i < indent; i++)
+    if (!root) return;
+    for (int i = 0; i < indent; i++) {
         printf("  ");
+    }
     printf("%s", root->name);
-    if (root->value)
+    if (root->value && strlen(root->value) > 0)
         printf(": %s", root->value);
     printf("\n");
     for (int i = 0; i < root->n_children; i++) {
@@ -50,13 +41,14 @@ void print_ast(ast* root, int indent) {
     }
 }
 
+/* Libera a memória da AST */
 void free_ast(ast* root) {
-    if (root == NULL) return;
-    if (root->name) free(root->name);
+    if (!root) return;
+    free(root->name);
     if (root->value) free(root->value);
     for (int i = 0; i < root->n_children; i++) {
         free_ast(root->children[i]);
     }
-    if (root->children) free(root->children);
+    free(root->children);
     free(root);
 }

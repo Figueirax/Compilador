@@ -20,7 +20,6 @@ int line_number = 1;
 "int"          { return INT; }
 "return"       { return RETURN; }
 "void"         { return VOID; }
-"main"          { return MAIN; }
 
 
 [a-zA-Z_][a-zA-Z0-9_]*  { 

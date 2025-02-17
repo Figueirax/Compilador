@@ -19,8 +19,8 @@ typedef struct scope {
 
 /* Estrutura para armazenar a lista de símbolos locais de cada função */
 typedef struct function_symbols {
-    char* func_name;         // nome da função
-    Simbolo* local_symbols;  // lista de símbolos copiada do escopo local
+    char* func_name;     
+    Simbolo* local_symbols; 
     struct function_symbols* prox;
 } FunctionSymbols;
 
