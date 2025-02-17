@@ -1,3 +1,6 @@
+%option noinput nounput
+
+
 %{
 #include "parser.tab.h"  // Para os tokens gerados pelo Bison
 #include <stdio.h>
@@ -17,6 +20,8 @@ int line_number = 1;
 "int"          { return INT; }
 "return"       { return RETURN; }
 "void"         { return VOID; }
+"main"          { return MAIN; }
+
 
 [a-zA-Z_][a-zA-Z0-9_]*  { 
     yylval.str = strdup(yytext); 
@@ -35,6 +40,7 @@ int line_number = 1;
 ">"         { return MAIOR; }
 "!="        { return DIFERENTE; }
 "="         { return IGUAL; }
+
 
 "+"         { return SOMA; }
 "-"         { return SUB; }

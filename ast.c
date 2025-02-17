@@ -25,6 +25,18 @@ ast* new_ast(char* name, char* value, int n, ...) {
     return node;
 }
 
+ast* criar_programa(ast* declaracoes_globais, ast* declaracoes_funcoes) {
+    return new_ast("programa", "", 2, declaracoes_globais, declaracoes_funcoes);
+}
+
+/* Cria uma lista de comandos */
+ast* criar_lista_comandos(ast* novo_comando, ast* comandos_existentes) {
+    if (!comandos_existentes) {
+        return new_ast("lista_comandos", "", 1, novo_comando);
+    }
+    return new_ast("lista_comandos", "", 2, comandos_existentes, novo_comando);
+}
+
 void print_ast(ast* root, int indent) {
     if (root == NULL) return;
     for (int i = 0; i < indent; i++)
