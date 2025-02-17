@@ -67,7 +67,11 @@ int line_number = 1;
 
 \n          { line_number++; }
 
-.           { return ERRO; }
+. {
+    fprintf(stderr, "Erro léxico: Caractere inválido '%s' na linha %d\n", yytext, line_number);
+    exit(1);
+}
+
 
 %%
 
