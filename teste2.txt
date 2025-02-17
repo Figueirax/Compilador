@@ -1,7 +1,0 @@
-int x = 0;
-
-int pedro() {
-    int a[];
-    int b;
-    b = 10;
-}
