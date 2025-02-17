@@ -208,7 +208,9 @@ Tipo verificar_semantica(ast* no) {
             Simbolo* sim = lookup_simbolo_scoped(no->value);
             if (sim == NULL) {
                 fprintf(stderr, "Erro semântico: variável '%s' não declarada.\n", no->value);
+                exit(1);
                 return TIPO_INDEFINIDO;
+                
             }
             return sim->tipo;
         }
